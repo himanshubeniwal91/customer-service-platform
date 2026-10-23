@@ -11,6 +11,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+
+
+
+
 @Service
 public class UserService {
 
@@ -68,4 +77,39 @@ public class UserService {
                 savedUser.getCreatedAt()
         );
     }
+
+    
+public List<UserResponse> getAllUsers() {
+
+    return userRepository.findAll()
+            .stream()
+            .map(user -> new UserResponse(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getRole(),
+                    user.isEnabled(),
+                    user.getCreatedAt()
+            ))
+            .collect(Collectors.toList());
+}
+
+public UserResponse getUserById(Long id) {
+
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "User not found with id: " + id
+            ));
+
+    return new UserResponse(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getRole(),
+            user.isEnabled(),
+            user.getCreatedAt()
+    );
+}
+
 }
