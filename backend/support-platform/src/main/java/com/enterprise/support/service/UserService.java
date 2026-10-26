@@ -112,4 +112,19 @@ public UserResponse getUserById(Long id) {
     );
 }
 
+
+
+@Transactional
+public void deleteUser(Long id) {
+
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "User not found with id: " + id
+            ));
+
+    userRepository.delete(user);
+}
+
+
 }

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -46,4 +48,15 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+
+
+    
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+
+    userService.deleteUser(id);
+
+    return ResponseEntity.noContent().build();
+}
+
 }

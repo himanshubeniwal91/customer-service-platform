@@ -24,18 +24,37 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+
                 // Allow registration without authentication
                 .requestMatchers(
                     HttpMethod.POST,
                     "/api/users/register"
                 ).permitAll()
 
-                // Temporarily allow GET requests for local testing
-         .requestMatchers(
-    HttpMethod.GET,
-    "/api/users",
-    "/api/users/**"
-).permitAll()
+                // Allow login without authentication
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/auth/login"
+                ).permitAll()
+
+                // Allow GET user endpoints for local testing
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/users",
+                    "/api/users/**"
+                ).permitAll()
+
+                // Allow PUT requests for local testing
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/users/**"
+                ).permitAll()
+
+                // Allow DELETE requests for local testing
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/users/**"
+                ).permitAll()
 
                 // Require authentication for all other requests
                 .anyRequest().authenticated()
